@@ -1,9 +1,13 @@
 // json data retrival with fetch api
 // define app root
-const container = document.getElementById('root')
+showAllUsers();
+
+function showAllUsers(){
+let container = document.getElementById('root')
 
 // define url
-const url = 'http://localhost/To-do/PHP/API/readAllUsers.php';
+let url = 'http://localhost/CRUD-REST_API/PHP/API/readAllUsers.php';
+http://localhost/To-do/PHP/API/readSingleUser.php?id=1
 //const url = 'http://localhost/To-do/PHP/API/readSingleUser.php?id=1';
 console.log(url);
 fetch(url) //fetch url
@@ -12,40 +16,64 @@ fetch(url) //fetch url
 
 .then(function(data) {
   // build view here...
-console.log(data);
-  data.forEach(user => {
-    // build movie card
+  console.log(data);
 
-    const userCard = document.createElement('article');
-    userCard.setAttribute('class', 'card');
+  // build movie card Template litteral
+  container.innerHTML=`
+  <h2>Users</h2>
+  ${data.map(function(myUser){
+    // yep another template litteral
+    return `<article class="userCard">
+    <h3>${myUser.username}</h3>
+    <p>Email: ${myUser.email} Password: ${myUser.password}</p>
+    <button type="button" onclick="editUser(${myUser.id})">Edit</button>
+    </article>
+    `
 
-    const h2 = document.createElement('h2');
-    h2.textContent = user.username;
-
-
-    const p = document.createElement('p');
- // movie.description = movie.description.substring(0, 300); // Limit to 300 chars
- p.textContent = user.email+' '+user.password; // End with an ellipses
-
-
-
- // Append article to DOM
- container.appendChild(userCard);
- // append H2 and paragraph
-
- userCard.appendChild(h2);
- userCard.appendChild(p);
-
-
-
-
-    console.log(user);
-
-  })
+  }).join('')}
+  `
 
 })
+
+
 // catch errors
 .catch(function() {
 
   console.log("uuuups");
 });
+
+}
+
+
+
+function editUser(myId){
+
+  let container = document.getElementById('root')
+
+  // define url
+  let url = 'http://localhost/CRUD-REST_API/PHP/API/readSingleUser.php?id='+myId;
+  //const url = 'http://localhost/To-do/PHP/API/readSingleUser.php?id=1';
+  console.log(url);
+  fetch(url) //fetch url
+
+  .then((resp) => resp.json()) // use the response as json
+
+  .then(function(data) {
+  // build movie card Template litteral
+    container.innerHTML=`
+    <h2>Edit user</h2>
+      <h3>${data.username}</h3>
+      <p>Email: ${data.email} Password: ${data.password}</p>
+    <button type="button" onclick="showAllUsers()">Back</button>
+      </article>
+    `
+
+  })
+
+
+}
+
+function updateUser(myId){
+
+
+}
